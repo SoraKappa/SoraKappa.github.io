@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los de aquí y los de allá — Registro de asistencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #2e2416;
+    --card: #f5ede0;
+    --border: #c9a97a;
+    --terracotta: #b5513a;
+    --terracotta-dark: #8c3a27;
+    --terracotta-light: #d4745a;
+    --khaki: #c2a96e;
+    --khaki-light: #d9c49a;
+    --khaki-dark: #9b8250;
+    --cream: #fdf6ec;
+    --text-dark: #2e2010;
+    --text-mid: #5c4a30;
+    --text-light: #8a7055;
+    --text-card: #3a2810;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--cream);
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+    background-image:
+      radial-gradient(ellipse at 15% 10%, rgba(181,81,58,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 90%, rgba(194,169,110,0.12) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c2a96e' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .container { max-width: 600px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .evento-label {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--khaki-light);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 44px);
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+
+  h1 em { color: var(--terracotta-light); font-style: italic; }
+
+  .slogan {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--khaki-light);
+    margin-bottom: 14px;
+    opacity: 0.85;
+  }
+
+  .divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--terracotta-light), var(--khaki), transparent);
+    margin: 18px auto;
+  }
+
+  .divider-sm {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--khaki-dark), transparent);
+    margin: 12px auto 18px;
+  }
+
+  .event-info {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .event-info span {
+    font-size: 13px;
+    color: var(--khaki-light);
+    opacity: 0.9;
+  }
+
+  .event-info strong { color: var(--terracotta-light); }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--khaki-light);
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 14px auto 0;
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--khaki-light);
+    border-radius: 14px;
+    padding: 36px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.6s ease both;
+    box-shadow: 0 4px 24px rgba(46,36,22,0.3);
+  }
+
+  .field { margin-bottom: 26px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .optional {
+    color: var(--text-light);
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-left: 6px;
+    text-transform: none;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  select {
+    width: 100%;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dark);
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    padding: 13px 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+  }
+
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  select:focus {
+    border-color: var(--terracotta);
+    box-shadow: 0 0 0 3px rgba(181,81,58,0.12);
+  }
+
+  input::placeholder { color: var(--text-light); font-size: 14px; }
+  .hint { font-size: 12px; color: var(--text-mid); margin-top: 7px; line-height: 1.5; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: var(--terracotta-dark);
+    margin-bottom: 6px;
+  }
+
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, var(--khaki-light), transparent);
+    margin-bottom: 24px;
+  }
+
+  /* Radio tipo entrada */
+  .entrada-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .entrada-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: center;
+  }
+
+  .entrada-item:hover { border-color: var(--terracotta); background: rgba(181,81,58,0.05); }
+
+  .entrada-item input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--terracotta);
+    cursor: pointer;
+  }
+
+  .entrada-item .precio {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--terracotta-dark);
+    font-weight: 700;
+  }
+
+  .entrada-item .tipo {
+    font-size: 12px;
+    color: var(--text-mid);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .entrada-item .nota {
+    font-size: 11px;
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  /* Contador personas */
+  .counter-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .counter-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    color: var(--terracotta-dark);
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .counter-btn:hover { border-color: var(--terracotta); background: rgba(181,81,58,0.06); }
+
+  .counter-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--terracotta-dark);
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .counter-label { font-size: 13px; color: var(--text-mid); }
+
+  /* Como se enteraron */
+  .radio-group { display: flex; flex-direction: column; gap: 10px; }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    color: var(--text-card);
+    font-size: 14px;
+  }
+
+  .radio-item:hover { border-color: var(--terracotta); background: rgba(181,81,58,0.06); }
+
+  .radio-item input[type="radio"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--terracotta);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* Info box */
+  .info-box {
+    background: rgba(194,169,110,0.15);
+    border: 1px solid var(--khaki);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.6s ease both;
+    animation-delay: 0.4s;
+  }
+
+  .info-box p { font-size: 13px; color: var(--cream); line-height: 1.8; }
+  .info-box strong { color: var(--khaki-light); }
+
+  /* Success */
+  .success-msg {
+    display: none;
+    text-align: center;
+    background: rgba(194,169,110,0.15);
+    border: 1px solid var(--khaki);
+    border-radius: 12px;
+    padding: 40px 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .success-msg .success-icon { font-size: 48px; margin-bottom: 14px; }
+  .success-msg h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .success-msg p { color: var(--khaki-light); font-size: 14px; line-height: 1.7; }
+
+  .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--terracotta), var(--terracotta-light));
+    color: var(--cream);
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 10px;
+    padding: 18px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    margin-top: 8px;
+    animation: fadeUp 0.6s ease both;
+    animation-delay: 0.5s;
+    box-shadow: 0 4px 16px rgba(181,81,58,0.35);
+  }
+
+  .btn-submit:hover { opacity: 0.92; transform: translateY(-2px); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .email-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--khaki-light);
+    margin-top: 12px;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 24px 18px; }
+    .entrada-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="evento-label">Registro de asistencia</span>
+    <h1>Los de aquí y<br><em>los de allá</em></h1>
+    <div class="divider-sm"></div>
+    <p class="slogan">"Recordando el origen del artista y su arte"</p>
+    <div class="divider"></div>
+    <div class="event-info">
+      <span>📅 <strong>Domingo 26 de abril</strong></span>
+      <span>🕐 <strong>4:00 PM</strong></span>
+      <span>📍 <strong>Cantina Dos Nortes</strong></span>
+    </div>
+    <p class="subtitle">¡Nos da mucho gusto que quieras acompañarnos! Por favor llena este breve formulario para confirmar tu asistencia. 🙌</p>
+  </header>
+
+  <div class="success-msg" id="successMsg">
+    <div class="success-icon">🎙️</div>
+    <h2>¡Nos vemos pronto!</h2>
+    <p>Tu asistencia ha sido confirmada. Te esperamos el <strong>domingo 26 de abril a las 4:00 PM</strong> en el Restaurante Bar "Cantina Dos Nortes".<br><br>¡Gracias por ser parte de este evento! ✨</p>
+  </div>
+
+  <form id="registroForm" action="https://formspree.io/f/mbdprkrn" method="POST">
+    <input type="hidden" name="_subject" value="🎟️ Nueva asistencia confirmada — Los de aquí y los de allá">
+
+    <!-- Datos -->
+    <div class="card">
+      <p class="section-title">Tus datos</p>
+      <div class="section-divider"></div>
+
+      <div class="field">
+        <label>Nombre <span class="optional">(opcional)</span></label>
+        <input type="text" name="Nombre" placeholder="¿Cómo te llamamos?">
+      </div>
+
+      <div class="field">
+        <label>¿Cuántas personas asistirán? *</label>
+        <div class="counter-wrap">
+          <button type="button" class="counter-btn" onclick="cambiarPersonas(-1)">−</button>
+          <div>
+            <div class="counter-num" id="numPersonas">1</div>
+            <div class="counter-label">persona(s)</div>
+          </div>
+          <button type="button" class="counter-btn" onclick="cambiarPersonas(1)">+</button>
+        </div>
+        <input type="hidden" name="Número de personas" id="inputPersonas" value="1">
+      </div>
+
+      <div class="field" id="nombresWrap">
+        <label>Nombres de los asistentes <span class="optional">(opcional)</span></label>
+        <div id="nombresContainer" style="display:flex;flex-direction:column;gap:10px;">
+          <input type="text" name="Asistente 1" placeholder="Persona 1">
+        </div>
+      </div>
+    </div>
+
+    <!-- Tipo de entrada -->
+    <div class="card">
+      <p class="section-title">Precios de entrada</p>
+      <div class="section-divider"></div>
+      <div class="field" style="margin-bottom:0;">
+        <div class="entrada-grid">
+          <div class="entrada-item" style="cursor:default;">
+            <span class="precio">$110</span>
+            <span class="tipo">Preventa</span>
+            <span class="nota">Antes del evento</span>
+          </div>
+          <div class="entrada-item" style="cursor:default;">
+            <span class="precio">$150</span>
+            <span class="tipo">Día del evento</span>
+            <span class="nota">26 de abril</span>
+          </div>
+        </div>
+        <p class="hint" style="margin-top:14px;">📲 Una vez realizado tu pago, envía tu comprobante al número <strong style="color:var(--terracotta-dark);">+52 81 2759 1393</strong> vía WhatsApp o por mensaje directo en Instagram <strong style="color:var(--terracotta-dark);">@los_de_aqui_y_los_de_alla</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Cómo se enteraron -->
+    <div class="card">
+      <p class="section-title">¿Cómo te enteraste? *</p>
+      <div class="section-divider"></div>
+
+      <div class="field">
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Instagram" required onchange="toggleOtro(this)"> <span>📱 Instagram</span></label>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="WhatsApp" onchange="toggleOtro(this)"> <span>💬 WhatsApp</span></label>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Un amigo o conocido" onchange="toggleOtro(this)"> <span>🤝 Un amigo o conocido</span></label>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Un participante del evento" onchange="toggleOtro(this)"> <span>🎙️ Un participante del evento</span></label>
+          <div id="participanteWrap" style="display:none;margin-top:-4px;padding:0 4px;">
+            <input type="text" name="Participante que invitó" placeholder="¿Cómo se llama o cuál es su nombre artístico?">
+          </div>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Otro" onchange="toggleOtro(this)"> <span>➕ Otro</span></label>
+        </div>
+        <div id="otroWrap" style="display:none;margin-top:12px;">
+          <input type="text" name="Cómo se enteró (otro)" placeholder="Cuéntanos cómo te enteraste...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="info-box">
+      <p>📍 <strong>Restaurante Bar "Cantina Dos Nortes"</strong> — Monterrey, N.L.<br>
+      📅 <strong>Domingo 26 de abril · 4:00 PM</strong><br><br>
+      🎙️ Música · Poesía · Comedia · Magia y más<br><br>
+      ¡Nos vemos pronto! ✨</p>
+    </div>
+
+    <!-- Datos de pago -->
+    <div class="card" style="animation-delay:0.45s;">
+      <p class="section-title">Datos para transferencia</p>
+      <div class="section-divider"></div>
+      <div class="field" style="margin-bottom:0;">
+        <p style="font-size:13px;color:var(--text-mid);margin-bottom:16px;">Te compartimos los datos para que puedas transferir tu cover:</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--terracotta);margin-bottom:4px;font-weight:700;">CLABE</p>
+            <p style="font-size:17px;color:var(--text-dark);font-family:'Playfair Display',serif;letter-spacing:1px;">722969069712718901</p>
+          </div>
+          <div style="background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--terracotta);margin-bottom:4px;font-weight:700;">Beneficiario</p>
+            <p style="font-size:16px;color:var(--text-dark);">Sora Kappa</p>
+          </div>
+          <div style="background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--terracotta);margin-bottom:4px;font-weight:700;">Institución</p>
+            <p style="font-size:16px;color:var(--text-dark);">Mercado Pago W</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit" id="btnSubmit">Confirmar asistencia</button>
+    <p class="email-note">Tu registro llegará directo al organizador 📩</p>
+
+  </form>
+</div>
+
+<script>
+let personas = 1;
+
+function cambiarPersonas(delta) {
+  personas = Math.max(1, Math.min(20, personas + delta));
+  document.getElementById('numPersonas').textContent = personas;
+  document.getElementById('inputPersonas').value = personas;
+
+  const container = document.getElementById('nombresContainer');
+  const actual = container.querySelectorAll('input').length;
+
+  if (personas > actual) {
+    for (let i = actual + 1; i <= personas; i++) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.name = `Asistente ${i}`;
+      input.placeholder = `Persona ${i}`;
+      container.appendChild(input);
+    }
+  } else {
+    const inputs = container.querySelectorAll('input');
+    for (let i = inputs.length; i > personas; i--) {
+      container.removeChild(inputs[i - 1]);
+    }
+  }
+}
+
+function toggleOtro(radio) {
+  document.getElementById('otroWrap').style.display = radio.value === 'Otro' ? 'block' : 'none';
+  document.getElementById('participanteWrap').style.display = radio.value === 'Un participante del evento' ? 'block' : 'none';
+}
+
+const form = document.getElementById('registroForm');
+const btn = document.getElementById('btnSubmit');
+const successMsg = document.getElementById('successMsg');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  try {
+    const formData = new FormData(form);
+    const response = await fetch('https://formspree.io/f/mbdprkrn', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      form.style.display = 'none';
+      successMsg.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Confirmar asistencia';
+      alert('Hubo un problema al enviar. Por favor intenta de nuevo.');
+    }
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Confirmar asistencia';
+    alert('Error de conexión. Por favor intenta de nuevo.');
+  }
+});
+</script>
+</body>
+</html>
