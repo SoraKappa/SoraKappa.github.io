@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los de aquí y los de allá — Del Barrio al Escenario</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: #111111;
+    --border: #2a2a2a;
+    --gold: #d4a520;
+    --gold-light: #f0c040;
+    --gold-dark: #a07c10;
+    --gold-dim: #7a5c0a;
+    --cream: #f5f0e0;
+    --text: #e8e0cc;
+    --muted: #6a6050;
+    --warning: #ff4444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(212,165,32,0.015) 40px, rgba(212,165,32,0.015) 41px),
+      radial-gradient(ellipse at 10% 0%, rgba(212,165,32,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 100%, rgba(212,165,32,0.05) 0%, transparent 50%);
+  }
+
+  .container { max-width: 620px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 48px; animation: fadeDown 0.8s ease both; }
+
+  .evento-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .age-restriction {
+    display: inline-block;
+    border: 1px solid var(--warning);
+    color: var(--warning);
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+    border-radius: 3px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 9vw, 76px);
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 4px;
+    letter-spacing: 2px;
+  }
+
+  h1 em { color: var(--gold); font-style: normal; display: block; }
+
+  .slogan {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin: 12px 0;
+  }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 16px auto; max-width: 300px; }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dark)); }
+  .divider-line.right { background: linear-gradient(to left, transparent, var(--gold-dark)); }
+  .divider-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+
+  .subtitle { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 480px; margin: 0 auto; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--gold-dark);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 14px;
+    animation: fadeUp 0.6s ease both;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  .field { margin-bottom: 24px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .optional { color: var(--muted); font-size: 10px; letter-spacing: 1px; margin-left: 6px; text-transform: none; font-weight: 400; }
+
+  input[type="text"], input[type="tel"], textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-bottom: 1px solid var(--gold-dim);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    padding: 13px 16px;
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+  }
+
+  input[type="text"]:focus, input[type="tel"]:focus, textarea:focus {
+    border-color: var(--gold);
+    background: rgba(212,165,32,0.04);
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--muted); font-size: 14px; }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+  }
+
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold-dim), transparent);
+    margin-bottom: 22px;
+  }
+
+  /* Tipo de boleto */
+  .boleto-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  .boleto-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: center;
+  }
+
+  .boleto-item:hover { border-color: var(--gold-dark); background: rgba(212,165,32,0.05); }
+
+  .boleto-item input[type="radio"] {
+    width: 17px; height: 17px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+
+  .boleto-item .precio {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+  }
+
+  .boleto-item .tipo { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--text); letter-spacing: 2px; text-transform: uppercase; }
+  .boleto-item .nota { font-size: 10px; color: var(--muted); }
+
+  /* Pago Info */
+  .pago-datos {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px dashed var(--gold-dim);
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .pago-datos h4 { 
+    font-family: 'Barlow Condensed', sans-serif; 
+    color: var(--gold); 
+    margin-bottom: 12px; 
+    font-size: 14px; 
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .pago-item { font-size: 14px; margin-bottom: 6px; }
+  .pago-item strong { color: var(--gold-light); }
+  
+  .leyenda-importante {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--gold-light);
+    line-height: 1.5;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* Counter */
+  .counter-wrap { display: flex; align-items: center; gap: 16px; }
+  .counter-btn {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--gold-light);
+    font-size: 20px; font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .counter-btn:hover { border-color: var(--gold); }
+  .counter-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--gold-light); min-width: 40px; text-align: center; }
+  .counter-label { font-size: 13px; color: var(--muted); }
+
+  /* Radio */
+  .radio-group { display: flex; flex-direction: column; gap: 10px; }
+  .radio-item {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    color: var(--text); font-size: 14px;
+  }
+  .radio-item:hover { border-color: var(--gold-dark); }
+  .radio-item input[type="radio"] { width: 17px; height: 17px; accent-color: var(--gold); cursor: pointer; flex-shrink: 0; }
+
+  /* Info box */
+  .info-box {
+    background: rgba(212,165,32,0.06);
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+  .info-box p { font-size: 13px; color: var(--text); line-height: 1.8; }
+  .info-box strong { color: var(--gold-light); }
+
+  /* Success */
+  .success-msg {
+    display: none;
+    text-align: center;
+    background: rgba(212,165,32,0.06);
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 40px 24px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .success-msg .success-icon { font-size: 48px; margin-bottom: 14px; }
+  .success-msg h2 { font-family: 'Bebas Neue', sans-serif; color: var(--gold-light); font-size: 36px; letter-spacing: 3px; margin-bottom: 10px; }
+  .success-msg p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+  .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+    color: #0a0a0a;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    border: none;
+    border-radius: 2px;
+    padding: 18px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px rgba(212,165,32,0.25);
+  }
+  .btn-submit:hover { opacity: 0.92; transform: translateY(-2px); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .email-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.6; opacity: 0.8; }
+  .email-note span { color: var(--gold-dark); }
+
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 480px) {
+    .card { padding: 22px 18px; }
+    .boleto-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="evento-label">Registro de asistencia · 2da Edición</span>
+    <h1>Los de aquí y<br><em>los de allá</em></h1>
+    <p class="slogan">Del barrio al escenario</p>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-diamond"></div>
+      <div class="divider-line right"></div>
+    </div>
+    <p class="subtitle">¡Nos da mucho gusto que quieras acompañarnos! Llena este formulario para confirmar tu asistencia. 🙌</p>
+    <div class="age-restriction">EVENTO +18</div>
+  </header>
+
+  <div class="success-msg" id="successMsg">
+    <div class="success-icon">🎤</div>
+    <h2>¡Nos vemos pronto!</h2>
+    <p>Tu asistencia ha sido confirmada. Te esperamos el <strong>sábado 23 de mayo a las 8:30 PM</strong> en Nodriza Estudio.<br><br>¡Del barrio al escenario! 🔥</p>
+  </div>
+
+  <form id="registroForm" action="https://formspree.io/f/mbdprkrn" method="POST">
+    <input type="hidden" name="_subject" value="🎟️ Nueva asistencia — Los de aquí y los de allá 2da Edición">
+
+    <div class="card">
+      <p class="section-title">Tus datos</p>
+      <div class="section-divider"></div>
+
+      <div class="field">
+        <label>Nombre <span class="optional">(opcional)</span></label>
+        <input type="text" name="Nombre" placeholder="¿Cómo te llamamos?">
+      </div>
+
+      <div class="field">
+        <label>¿Cuántas personas asistirán? *</label>
+        <div class="counter-wrap">
+          <button type="button" class="counter-btn" onclick="cambiarPersonas(-1)">−</button>
+          <div>
+            <div class="counter-num" id="numPersonas">1</div>
+            <div class="counter-label">persona(s)</div>
+          </div>
+          <button type="button" class="counter-btn" onclick="cambiarPersonas(1)">+</button>
+        </div>
+        <input type="hidden" name="Número de personas" id="inputPersonas" value="1">
+        <div id="nombresContainer" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;">
+          <input type="text" name="Asistente 1" placeholder="Persona 1">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">Tipo de boleto *</p>
+      <div class="section-divider"></div>
+
+      <div class="field">
+        <div class="boleto-grid">
+          <label class="boleto-item">
+            <input type="radio" name="Tipo de boleto" value="Preventa — $180 pesos" required>
+            <span class="precio">$180</span>
+            <span class="tipo">Preventa</span>
+            <span class="nota">85 disponibles</span>
+          </label>
+          <label class="boleto-item">
+            <input type="radio" name="Tipo de boleto" value="Día del evento — $250 pesos">
+            <span class="precio">$250</span>
+            <span class="tipo">Día del evento</span>
+            <span class="nota"></span>
+          </label>
+          <label class="boleto-item">
+            <input type="radio" name="Tipo de boleto" value="Meet & Greet — $350 pesos">
+            <span class="precio">$350</span>
+            <span class="tipo">Meet & Greet</span>
+            <span class="nota">Solo 15 lugares</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="pago-datos">
+        <h4>Información para Transferencia</h4>
+        <div class="pago-item">CLABE: <strong>722969069712718901</strong></div>
+        <div class="pago-item">Beneficiario: <strong>Sora Kappa</strong></div>
+        <div class="pago-item">Institución: <strong>Mercado Pago</strong></div>
+        
+        <div class="leyenda-importante">
+          “RECUERDA ENVIAR TU COMPROBANTE AL SIGUIENTE NÚMERO DE WHATSAPP 81-27-59-13-93, PARA RECIBIR TU ACCESO, OJO ESTE LLEVA TU NOMBRE POR LO CUAL ES INTRANSFERIBLE”
+        </div>
+      </div>
+      
+      <p class="hint" style="margin-top:12px;">💳 Transferencia, tarjeta o efectivo. Una vez realizado tu pago envía tu comprobante por WhatsApp al número mencionado arriba o por DM a <strong style="color:var(--gold-dark);">@los_de_aqui_y_los_de_alla</strong></p>
+    </div>
+
+    <div class="card">
+      <p class="section-title">¿Cómo te enteraste? *</p>
+      <div class="section-divider"></div>
+
+      <div class="field">
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Instagram" required onchange="toggleOtro(this)"> <span>📱 Instagram</span></label>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="WhatsApp" onchange="toggleOtro(this)"> <span>💬 WhatsApp</span></label>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Un amigo o conocido" onchange="toggleOtro(this)"> <span>🤝 Un amigo o conocido</span></label>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Un participante del evento" onchange="toggleOtro(this)"> <span>🎤 Un participante del evento</span></label>
+          <div id="participanteWrap" style="display:none;margin-top:-4px;padding:0 4px;">
+            <input type="text" name="Participante que invitó" placeholder="¿Cómo se llama o cuál es su nombre artístico?">
+          </div>
+          <label class="radio-item"><input type="radio" name="Cómo se enteró" value="Otro" onchange="toggleOtro(this)"> <span>➕ Otro</span></label>
+          <div id="otroWrap" style="display:none;margin-top:-4px;padding:0 4px;">
+            <input type="text" name="Cómo se enteró (otro)" placeholder="Cuéntanos cómo te enteraste...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <p>📅 <strong>Sábado 23 de mayo · 8:30 PM</strong><br>
+      📍 <strong>Nodriza Estudio — Matamoros 534, Segundo Piso, MTY</strong><br><br>
+      🎤 Hip Hop · Rap · Cultura Urbana · Meet & Greet · Invitado especial<br><br>
+      @nodriza.estudio · @los_de_aqui_y_los_de_alla · @hippie.bites</p>
+    </div>
+
+    <button type="submit" class="btn-submit" id="btnSubmit">Confirmar asistencia</button>
+    <p class="email-note">Tu registro llegará directo al organizador 📩<br>
+    <span>sorakappa22@gmail.com</span></p>
+
+  </form>
+</div>
+
+<script>
+let personas = 1;
+
+function cambiarPersonas(delta) {
+  personas = Math.max(1, Math.min(20, personas + delta));
+  document.getElementById('numPersonas').textContent = personas;
+  document.getElementById('inputPersonas').value = personas;
+  const container = document.getElementById('nombresContainer');
+  const actual = container.querySelectorAll('input').length;
+  if (personas > actual) {
+    for (let i = actual + 1; i <= personas; i++) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.name = `Asistente ${i}`;
+      input.placeholder = `Persona ${i}`;
+      container.appendChild(input);
+    }
+  } else {
+    const inputs = container.querySelectorAll('input');
+    for (let i = inputs.length; i > personas; i--) {
+      container.removeChild(inputs[i - 1]);
+    }
+  }
+}
+
+function toggleOtro(radio) {
+  document.getElementById('otroWrap').style.display = radio.value === 'Otro' ? 'block' : 'none';
+  document.getElementById('participanteWrap').style.display = radio.value === 'Un participante del evento' ? 'block' : 'none';
+}
+
+const form = document.getElementById('registroForm');
+const btn = document.getElementById('btnSubmit');
+const successMsg = document.getElementById('successMsg');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  try {
+    const response = await fetch('https://formspree.io/f/mbdprkrn', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      form.style.display = 'none';
+      successMsg.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Confirmar asistencia';
+      alert('Hubo un problema al enviar. Por favor intenta de nuevo.');
+    }
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Confirmar asistencia';
+    alert('Error de conexión. Por favor intenta de nuevo.');
+  }
+});
+</script>
+</body>
+</html>
