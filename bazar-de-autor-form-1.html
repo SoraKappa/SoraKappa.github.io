@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bazar de Autor — Registro de Expositores</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f5efe4;
+      --warm-white: #faf7f2;
+      --ink: #1c1409;
+      --terracotta: #c85c3a;
+      --gold: #c9962a;
+      --sage: #7a9471;
+      --dusty-rose: #c08070;
+      --border: #d4c4a8;
+      --shadow: rgba(28, 20, 9, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root { color-scheme: light; }
+
+    @media (prefers-color-scheme: dark) {
+      body { background-color: #f5efe4 !important; color: #1c1409 !important; }
+      input, textarea, select { background-color: #f5efe4 !important; color: #1c1409 !important; border-color: #d4c4a8 !important; }
+      .card { background: #faf7f2 !important; border-color: #d4c4a8 !important; }
+      .type-option label, .radio-opt label { background: #f5efe4 !important; color: #5a4a30 !important; border-color: #d4c4a8 !important; }
+    }
+
+    body {
+      background-color: var(--cream);
+      background-image:
+        radial-gradient(ellipse at 10% 20%, rgba(201, 150, 42, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(200, 92, 58, 0.07) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.8' fill='%23c9962a' opacity='0.18'/%3E%3C/svg%3E");
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 40px 20px 80px;
+    }
+
+    .page-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--terracotta);
+      color: var(--warm-white);
+      font-family: 'Caveat', cursive;
+      font-size: 15px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 20px;
+      border-radius: 40px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(44px, 9vw, 72px);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .header h1 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .header-sub {
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      color: var(--gold);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    .organizer {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: #3a2e1a;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+    .organizer strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .header-date {
+      margin-top: 18px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #7a6a50;
+      font-weight: 500;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .divider span { flex: 1; height: 1px; background: var(--border); }
+    .divider em { font-size: 18px; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--warm-white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 40px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 24px var(--shadow);
+      animation: fadeUp 0.7s ease both;
+    }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.2s; }
+    .card:nth-child(4) { animation-delay: 0.3s; }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--terracotta);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title .num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: #7a6a50;
+      margin-bottom: 24px;
+      padding-left: 38px;
+    }
+
+    /* ── FORM ELEMENTS ── */
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: #4a3c28;
+      margin-bottom: 7px;
+    }
+    label .req { color: var(--terracotta); margin-left: 3px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201, 150, 42, 0.15);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--gold); pointer-events: none; font-size: 16px;
+    }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 520px) { .row { grid-template-columns: 1fr; } .card { padding: 28px 22px; } }
+
+    /* ── TIPO DE EXPOSITOR ── */
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .type-option {
+      position: relative;
+    }
+    .type-option input[type="checkbox"] {
+      position: absolute; opacity: 0; width: 0; height: 0;
+    }
+    .type-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--cream);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #5a4a30;
+      letter-spacing: 0;
+      margin: 0;
+    }
+    .type-option label .icon { font-size: 22px; }
+    .type-option input:checked + label {
+      border-color: var(--terracotta);
+      background: rgba(200, 92, 58, 0.07);
+      color: var(--terracotta);
+      box-shadow: 0 2px 10px rgba(200, 92, 58, 0.15);
+    }
+    .type-option label:hover {
+      border-color: var(--gold);
+      background: rgba(201, 150, 42, 0.06);
+    }
+
+    /* Separador interno */
+    .inner-divider {
+      margin: 24px 0 20px;
+      border: none;
+      border-top: 1px dashed var(--border);
+    }
+    .inner-label {
+      font-family: 'Caveat', cursive;
+      font-size: 17px;
+      color: var(--sage);
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── RADIO ── */
+    .radio-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+    .radio-opt { position: relative; }
+    .radio-opt input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .radio-opt label {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 40px;
+      background: var(--cream);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #5a4a30;
+      transition: all 0.2s;
+      margin: 0;
+    }
+    .radio-opt input:checked + label {
+      border-color: var(--terracotta);
+      background: rgba(200, 92, 58, 0.07);
+      color: var(--terracotta);
+    }
+    .radio-opt label:hover { border-color: var(--gold); }
+
+    /* ── SUBMIT ── */
+    .submit-area {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .btn-submit {
+      background: var(--terracotta);
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      font-style: italic;
+      padding: 16px 52px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 6px 24px rgba(200, 92, 58, 0.35);
+      letter-spacing: 0.5px;
+    }
+    .btn-submit:hover {
+      background: #b34e30;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(200, 92, 58, 0.45);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    .note {
+      font-size: 12px;
+      color: #9a8a6a;
+      margin-top: 12px;
+    }
+
+    /* ── SUCCESS ── */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 48px 32px;
+      background: var(--warm-white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+    .success-msg .big-icon { font-size: 56px; margin-bottom: 16px; }
+    .success-msg h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--terracotta);
+      margin-bottom: 10px;
+    }
+    .success-msg p { color: #7a6a50; font-size: 15px; line-height: 1.6; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+      font-family: 'Caveat', cursive;
+      font-size: 17px;
+      color: #9a8a6a;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">✦ Los de aquí y los de allá ✦</div>
+    <div class="organizer">presenta</div>
+    <h1>Bazar<br/><em>de Autor</em></h1>
+    <div class="header-sub">✦ mercadito cultural independiente ✦</div>
+    <div class="divider"><span></span><em>🌿</em><span></span></div>
+    <div class="header-date">27 · Junio · 2026</div>
+  </div>
+
+  <!-- FORM -->
+  <form id="bazarForm">
+
+    <!-- SECCIÓN 1: DATOS PERSONALES -->
+    <div class="card">
+      <div class="card-title"><span class="num">1</span> Datos del expositor</div>
+      <div class="card-desc">Tu información de contacto y presencia en redes.</div>
+
+      <div class="row">
+        <div class="field">
+          <label>Nombre completo <span class="req">*</span></label>
+          <input type="text" name="nombre" placeholder="¿Cómo te llamas?" required />
+        </div>
+        <div class="field">
+          <label>Nombre artístico / stand</label>
+          <input type="text" name="nombre_artistico" placeholder="Tu marca o alias" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>WhatsApp / Teléfono <span class="req">*</span></label>
+          <input type="tel" name="telefono" placeholder="81 0000 0000" required />
+        </div>
+        <div class="field">
+          <label>Correo electrónico</label>
+          <input type="email" name="email" placeholder="tucorreo@ejemplo.com" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Instagram</label>
+          <input type="text" name="instagram" placeholder="@tuusuario" />
+        </div>
+        <div class="field">
+          <label>Otra red social</label>
+          <input type="text" name="otra_red" placeholder="TikTok, Facebook, etc." />
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: TIPO DE EXPOSITOR -->
+    <div class="card">
+      <div class="card-title"><span class="num">2</span> ¿Qué vas a exponer?</div>
+      <div class="card-desc">Selecciona todo lo que aplique. Puedes elegir varias opciones.</div>
+
+      <!-- OBJETOS / ARTE -->
+      <div class="inner-label">🎨 Arte &amp; Objetos creativos</div>
+      <div class="type-grid">
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="crochet" id="t_crochet" />
+          <label for="t_crochet"><span class="icon">🧶</span>Crochet &amp; tejidos</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="llaveros" id="t_llaveros" />
+          <label for="t_llaveros"><span class="icon">🗝️</span>Llaveros &amp; accesorios</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="dibujo_digital" id="t_digital" />
+          <label for="t_digital"><span class="icon">🖥️</span>Dibujo digital</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="dibujo_mano" id="t_mano" />
+          <label for="t_mano"><span class="icon">✏️</span>Dibujo a mano</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="pintura" id="t_pintura" />
+          <label for="t_pintura"><span class="icon">🖌️</span>Pintura</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="posters" id="t_posters" />
+          <label for="t_posters"><span class="icon">🖼️</span>Pósters &amp; prints</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="fotografia" id="t_foto" />
+          <label for="t_foto"><span class="icon">📷</span>Fotografía</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="otro_objeto" id="t_otro_obj" />
+          <label for="t_otro_obj"><span class="icon">✨</span>Otro objeto</label>
+        </div>
+      </div>
+
+      <hr class="inner-divider" />
+
+      <!-- ALIMENTOS -->
+      <div class="inner-label">🍴 Alimentos &amp; bebidas</div>
+      <div class="type-grid">
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="comida_salada" id="t_salada" />
+          <label for="t_salada"><span class="icon">🌮</span>Comida salada</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="reposteria" id="t_reposteria" />
+          <label for="t_reposteria"><span class="icon">🍰</span>Repostería &amp; dulces</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="bebidas" id="t_bebidas" />
+          <label for="t_bebidas"><span class="icon">☕</span>Bebidas</label>
+        </div>
+        <div class="type-option">
+          <input type="checkbox" name="tipo[]" value="otro_alimento" id="t_otro_ali" />
+          <label for="t_otro_ali"><span class="icon">🛒</span>Otro alimento</label>
+        </div>
+      </div>
+
+      <!-- Descripción adicional -->
+      <div class="field" style="margin-top:20px;">
+        <label>Cuéntanos más sobre lo que ofreces</label>
+        <textarea name="descripcion" placeholder="Describe brevemente tus productos, materiales, estilo…"></textarea>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: LOGÍSTICA -->
+    <div class="card">
+      <div class="card-title"><span class="num">3</span> Logística del stand</div>
+      <div class="card-desc">Nos ayuda a organizar el espacio para que tod@s estén cómod@s.</div>
+
+      <div class="field">
+        <label>¿Necesitas mesa? <span class="req">*</span></label>
+        <div class="radio-group">
+          <div class="radio-opt">
+            <input type="radio" name="mesa" value="si" id="m_si" required />
+            <label for="m_si">✅ Sí, necesito mesa</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="mesa" value="no" id="m_no" />
+            <label for="m_no">🙅 Yo llevo la mía</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>¿Necesitas corriente eléctrica?</label>
+        <div class="radio-group">
+          <div class="radio-opt">
+            <input type="radio" name="electricidad" value="si" id="e_si" />
+            <label for="e_si">⚡ Sí</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="electricidad" value="no" id="e_no" />
+            <label for="e_no">🙅 No</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>¿Tienes algún requerimiento especial de espacio?</label>
+        <textarea name="requerimientos" placeholder="Ej: necesito espacio para colgar piezas, requiero sombra, llevo carrito, etc." style="min-height:70px;"></textarea>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 4: REDES Y EXTRAS -->
+    <div class="card">
+      <div class="card-title"><span class="num">4</span> Un poco más de ti</div>
+      <div class="card-desc">Queremos conocer tu historia y cómo llegar a tu trabajo.</div>
+
+      <div class="field">
+        <label>¿Cómo nos encontraste o quién te invitó?</label>
+        <input type="text" name="referido" placeholder="Nombre de quien te invitó, red social, etc." />
+      </div>
+
+      <div class="field">
+        <label>¿Algo que quieras agregar o preguntarnos?</label>
+        <textarea name="comentarios" placeholder="Dudas, comentarios, propuestas… ¡aquí va todo!" style="min-height:80px;"></textarea>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <button type="submit" class="btn-submit">¡Me apunto al Bazar! ✦</button>
+      <div class="note">Al registrarte, aceptas que tu información sea usada para la organización del evento.</div>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS -->
+  <div class="success-msg" id="successMsg">
+    <div class="big-icon">🎉</div>
+    <h2>¡Registro recibido!</h2>
+    <p>Gracias por sumarte al <strong>Bazar de Autor</strong>.<br/>
+    Nos pondremos en contacto contigo pronto con todos los detalles.<br/><br/>
+    <em>Nos vemos el 27 de junio. 🌿</em></p>
+  </div>
+
+  <div class="footer">✦ Bazar de Autor · 27 jun 2026 · hecho con cariño ✦</div>
+
+</div>
+
+<script>
+  document.getElementById('bazarForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Validación mínima: al menos un tipo seleccionado
+    const tipos = document.querySelectorAll('input[name="tipo[]"]:checked');
+    if (tipos.length === 0) {
+      alert('Por favor selecciona al menos un tipo de exposición.');
+      return;
+    }
+
+    // Animación de envío
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Enviando… ✦';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      document.getElementById('bazarForm').style.display = 'none';
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      msg.scrollIntoView({ behavior: 'smooth' });
+    }, 800);
+  });
+</script>
+</body>
+</html>
